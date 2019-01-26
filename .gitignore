@@ -1,0 +1,15 @@
+# Don't track packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Don't track virtual environments
+venv
+
+# Don't track non-text files
+*.pdf
