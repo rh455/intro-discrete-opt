@@ -10,6 +10,7 @@
 
 # Don't track virtual environments
 venv
+**/data/
 
 # Don't track non-text files
 *.pdf
