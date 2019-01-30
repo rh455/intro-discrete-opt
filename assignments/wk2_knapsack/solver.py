@@ -37,10 +37,31 @@ def solve_it(input_data):
     output_data += ' '.join(map(str, taken))
     return output_data
 
+
 def dyn_prog(items, capacity):
     taken = [0]*len(items)
-
-
+    #Nested dictionary. First level is length of list items, second level is capacities
+    dp = {}
+    
+    def subproblem(items, capacity):
+        #Base Case
+        if capacity <= 0 or len(items) == 0:
+            return 0
+        
+        #Recursive Case
+        if len(items) in dp and capacity in dp[len(items)]:
+            return dp[len(items)][capacity]
+        else:
+            if len(items) not in dp:
+                dp[len(items)] = {}
+            if subproblem(items[1:], capacity) > subproblem(items[1:], capacity - items[0].weight) + items[0].value:
+                dp[len(items)][capacity] = (0, subproblem(items[1:], capacity))
+            else:
+                dp[len(items)][capacity] = (1, subproblem(items[1:], capacity - items[0].weight) + items[0].value)
+        return dp[len(items)][capacity][1]
+    subproblem(items, capacity)
+    
+    #Extract indices of items taken
     return taken
 
 
