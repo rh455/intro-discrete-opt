@@ -11,6 +11,8 @@
 # Don't track virtual environments
 venv
 **/data/
+**/__pycache/
 
 # Don't track non-text files
 *.pdf
+*.pyc
