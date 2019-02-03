@@ -6,7 +6,6 @@ import math
 import multiprocessing
 import time
 
-
 Item = namedtuple("Item", ['index', 'value', 'weight'])
 
 def solve_it(input_data):
@@ -30,7 +29,7 @@ def solve_it(input_data):
     weight = 0
 
     #Select the algorithm
-    taken = dyn_prog(items, capacity)
+    taken = greedy(items, capacity)
 
     for item in items:
         if taken[item.index] == 1:
@@ -41,46 +40,6 @@ def solve_it(input_data):
     output_data = str(value) + ' ' + str(0) + '\n'
     output_data += ' '.join(map(str, taken))
     return output_data
-
-
-def dyn_prog(items, capacity):
-    taken = [0]*len(items)
-    #Nested dictionary. First level is length of list items, second level is capacities
-    #Values are tuples, first value is if the item is taken, the second is the value
-    dp = {}
-
-    def subproblem(items, capacity):
-        #Base Case
-        if capacity < 0:
-            return -math.inf
-        elif capacity == 0 or len(items) == 0:
-            return 0
-        
-        #Recursive Case
-        if len(items) in dp and capacity in dp[len(items)]:
-            return dp[len(items)][capacity][1]
-        else:
-            if len(items) not in dp:
-                #Make empty sub-dictionary
-                dp[len(items)] = {}
-            if subproblem(items[1:], capacity) > subproblem(items[1:], capacity - items[0].weight) + items[0].value:
-                dp[len(items)][capacity] = (0, subproblem(items[1:], capacity))
-            else:
-                dp[len(items)][capacity] = (1, subproblem(items[1:], capacity - items[0].weight) + items[0].value)
-        return dp[len(items)][capacity][1]
-    
-    subproblem(items, capacity)
-
-    #Extract indices of items taken
-    curlen = len(items)
-    curcapacity = capacity
-    while curlen > 0 and curcapacity > 0:
-        taken[len(items) - curlen] = dp[curlen][curcapacity][0]
-        curcapacity = curcapacity - items[len(items) - curlen].weight if taken[len(items) - curlen] == 1 else curcapacity
-        curlen -= 1
-
-    return taken
-
 
 def greedy(items, capacity):
     taken = [0]*len(items)
